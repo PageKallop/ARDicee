@@ -16,6 +16,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.sceneView.debugOptions = [ARSCNDebugOptions.showFeaturePoints]
+        
         // Set the view's delegate
         sceneView.delegate = self
         
@@ -60,9 +62,13 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         // Create a session configuration
         let configuration = ARWorldTrackingConfiguration()
+        
+        configuration.planeDetection = .horizontal
 
         // Run the view's session
         sceneView.session.run(configuration)
+        
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -70,6 +76,14 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         // Pause the view's session
         sceneView.session.pause()
+    }
+    
+    func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
+        if anchor is ARPlaneAnchor {
+            print("plane detected")
+        } else {
+            return
+        }
     }
 
 
