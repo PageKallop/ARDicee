@@ -100,6 +100,15 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                     z: hitResult.worldTransform.columns.3.z)
         
                 sceneView.scene.rootNode.addChildNode(diceNode)
+                    
+                    //animates the dice to roll and land on random number 
+                    let randomX = Float(arc4random_uniform(4) + 1) * (Float.pi/2)
+                    
+                    let randomZ = Float(arc4random_uniform(4) + 1) * (Float.pi/2)
+                    
+                    diceNode.runAction(
+                        SCNAction.rotateBy(x: CGFloat(randomX * 5), y: 0, z: CGFloat(randomZ * 5), duration: 0.5)
+                    )
                 }
         
             }
