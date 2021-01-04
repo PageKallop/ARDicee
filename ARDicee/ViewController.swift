@@ -77,6 +77,34 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         // Pause the view's session
         sceneView.session.pause()
     }
+    //indicates where on screne a user is tapping
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        
+        if let touch = touches.first {
+            
+            let touchLocation = touch.location(in: sceneView)
+            
+            let results = sceneView.hitTest(touchLocation, types: .existingPlane)
+            
+            
+            //creates scene using dice
+            if let hitResult = results.first {
+          
+                let diceScene = SCNScene(named: "art.scnassets/diceCollada copy.scn")!
+        
+                if let diceNode = diceScene.rootNode.childNode(withName: "Dice", recursively: true) {
+        
+                diceNode.position = SCNVector3(
+                    x: hitResult.worldTransform.columns.3.x,
+                    y: hitResult.worldTransform.columns.3.y + diceNode.boundingSphere.radius,
+                    z: hitResult.worldTransform.columns.3.z)
+        
+                sceneView.scene.rootNode.addChildNode(diceNode)
+                }
+        
+            }
+        }
+    }
     //detects plain
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
         if anchor is ARPlaneAnchor {
@@ -93,6 +121,12 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             let gridMaterial = SCNMaterial()
             
             gridMaterial.diffuse.contents = UIImage(named: "art.scnassets/grid.png")
+            
+            plane.materials = [gridMaterial]
+            
+            planeNode.geometry = plane
+            
+            node.addChildNode(planeNode)
             
         } else {
             return
