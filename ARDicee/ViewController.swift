@@ -124,7 +124,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     //removes dice from screen
     @IBAction func removeAll(_ sender: UIBarButtonItem) {
         
-        if diceArray.isEmpty {
+        if !diceArray.isEmpty {
             for dice in diceArray {
                 dice.removeFromParentNode()
             }
